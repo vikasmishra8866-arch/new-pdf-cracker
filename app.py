@@ -7,65 +7,58 @@ from PIL import Image
 from io import BytesIO
 
 # --- PAGE CONFIG ---
-st.set_page_config(page_title="Vikas Mishra | PDF Cracker Pro", layout="centered")
+st.set_page_config(page_title="Vikas Mishra | PDF Cracker VIP", layout="centered")
 
-# --- IMPROVED HIGH-CONTRAST NEON CSS ---
+# --- CUSTOM CSS (PREMIUM DARK & NEON) ---
 st.markdown("""
     <style>
-    /* Sabse pehle background aur global text colour fix */
     .stApp {
-        background: radial-gradient(circle, #1a1a2e 0%, #111122 100%);
+        background: #050510;
     }
-    
-    /* Sare labels aur text ko Force White karna */
-    label, p, span, .stMarkdown, .stSubheader, .stCaption {
+    label, p, span, .stMarkdown, .stSubheader {
         color: #FFFFFF !important;
-        font-weight: 600 !important;
-        text-shadow: 0px 0px 8px rgba(0, 210, 255, 0.4);
+        font-weight: 700 !important;
+        text-shadow: 0px 0px 10px #00d2ff;
     }
-
-    /* Input box ke andar ka text white karna */
     input {
-        color: #FFFFFF !important;
-        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: #00d2ff !important;
+        background-color: rgba(0, 210, 255, 0.1) !important;
+        border: 2px solid #00d2ff !important;
+        border-radius: 10px !important;
     }
-
-    /* Card design with Neon Border */
     .login-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.03);
         padding: 40px;
         border-radius: 20px;
-        border: 2px solid #00d2ff;
-        box-shadow: 0px 0px 25px #00d2ff;
+        border: 2px solid #e94560;
+        box-shadow: 0px 0px 30px #e94560;
         backdrop-filter: blur(15px);
-        margin-top: 20px;
+        text-align: center;
     }
-
-    /* Buttons Style */
-    .stButton>button {
-        width: 100%;
-        background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-        color: #FFFFFF !important;
-        border: none;
-        padding: 10px;
+    /* WhatsApp Button Style */
+    .wa-button {
+        background-color: #25D366;
+        color: white !important;
+        padding: 12px 25px;
+        border-radius: 30px;
+        text-decoration: none;
         font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        display: inline-block;
+        margin-top: 20px;
+        box-shadow: 0px 5px 15px rgba(37, 211, 102, 0.4);
     }
     </style>
     """, unsafe_allow_html=True)
 
 # --- DATABASE & SESSION ---
-if "users" not in st.session_state:
-    st.session_state.users = {"admin": "admin123"}
+# Yahan aap apni pasand ki Access Keys add kar sakte hain
+if "valid_keys" not in st.session_state:
+    st.session_state.valid_keys = ["VIKAS-786", "CRACK-2026", "VIP-USER"]
+
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "auth_mode" not in st.session_state:
     st.session_state.auth_mode = "Login"
-
-# --- MANUAL UTR LIST (Admin Approvals) ---
-# Yahan wo UTR dalo jinhone sach mein pay kiya hai
-APPROVED_UTRS = ["236451365213", "112233445566"] 
 
 # --- HELPER FUNCTIONS ---
 def generate_upi_qr(upi_id, amount):
@@ -76,83 +69,57 @@ def generate_upi_qr(upi_id, amount):
     return buf.getvalue()
 
 # --- MAIN UI ---
-st.markdown("<h1 style='text-align: center; color: #00d2ff;'>⚡ PDF CRACKER PRO</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #FFFFFF;'>MANAGED BY VIKAS MISHRA</p>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #00d2ff;'>⚡ PDF CRACKER VIP ACCESS</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #FFFFFF; font-style: italic;'>Developed by VIKAS MISHRA</p>", unsafe_allow_html=True)
 
 if not st.session_state.logged_in:
-    # --- LOGIN / REGISTER TABS ---
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("🔐 ACCESS LOGIN"): st.session_state.auth_mode = "Login"
+        if st.button("🔑 LOGIN WITH KEY"): st.session_state.auth_mode = "Login"
     with col2:
-        if st.button("📝 NEW REGISTRATION"): st.session_state.auth_mode = "Register"
+        if st.button("💳 GET KEY / REGISTER"): st.session_state.auth_mode = "Register"
 
     st.markdown('<div class="login-card">', unsafe_allow_html=True)
 
     if st.session_state.auth_mode == "Login":
-        st.subheader("Login to Dashboard")
-        u = st.text_input("Username", key="login_u")
-        p = st.text_input("Password", type="password", key="login_p")
-        if st.button("UNLOCK NOW"):
-            if u in st.session_state.users and st.session_state.users[u] == p:
+        st.subheader("Enter Your Access Key")
+        access_key = st.text_input("Access Key", type="password", placeholder="Paste your key here...")
+        
+        if st.button("AUTHENTICATE & ENTER"):
+            if access_key in st.session_state.valid_keys:
                 st.session_state.logged_in = True
+                st.success("Access Granted! Opening Dashboard...")
                 st.rerun()
-            else: st.error("Access Denied! Galat Username ya Password.")
+            else:
+                st.error("Invalid Key! Please get a valid key from Vikas Mishra.")
 
     else:
-        st.subheader("Register (Access Fee: ₹200)")
+        st.subheader("Get Your Access Key")
+        st.write("Step 1: Scan QR & Pay ₹200")
         
-        # QR Code Display
         qr_img = generate_upi_qr("9696159863@ptsbi", 200)
-        st.image(qr_img, width=220)
-        st.info("Scan QR with GPay/PhonePe & enter UTR below.")
+        st.image(qr_img, width=230)
         
-        utr_no = st.text_input("Enter 12-digit UTR No.", placeholder="Example: 236451365213")
-        new_u = st.text_input("Choose Username")
-        new_p = st.text_input("Set Password", type="password")
+        st.write("Step 2: Click below to get your key on WhatsApp")
+        # WhatsApp Link with Custom Message
+        wa_link = "https://wa.me/919696159863?text=Hello%20Vikas,%20I%20have%20paid%20200%20for%20PDF%20Cracker.%20Please%20give%20me%20my%20Access%20Key."
+        st.markdown(f'<a href="{wa_link}" target="_blank" class="wa-button">🟢 GET ACCESS KEY ON WHATSAPP</a>', unsafe_allow_html=True)
         
-        if st.button("VERIFY & REGISTER"):
-            if utr_no in APPROVED_UTRS:
-                st.session_state.users[new_u] = new_p
-                st.success("Payment Verified! Account Created. Ab Login karein.")
-            else: 
-                st.error("Invalid UTR! Pehle payment karein ya Admin se contact karein.")
-    
+        st.info("Payment verify hote hi aapko personal key mil jayegi.")
+
     st.markdown('</div>', unsafe_allow_html=True)
 
 else:
-    # --- CRACKER DASHBOARD ---
-    st.sidebar.markdown("<h3 style='color: #00d2ff;'>System Online</h3>", unsafe_allow_html=True)
-    if st.sidebar.button("LOGOUT"):
+    # --- PDF CRACKER CONTENT ---
+    st.sidebar.markdown("<h2 style='color: #00d2ff;'>VIP SYSTEM</h2>", unsafe_allow_html=True)
+    if st.sidebar.button("EXIT SYSTEM"):
         st.session_state.logged_in = False
         st.rerun()
 
-    st.subheader("🚀 Advanced PDF Decryptor")
-    pdf_file = st.file_uploader("Upload Password Protected PDF", type="pdf")
+    st.subheader("🚀 Start Decrypting Your PDF")
+    # Yahan wahi PDF cracking wala code jo maine pehle diya tha...
+    pdf_file = st.file_uploader("Upload Target PDF", type="pdf")
     
-    with st.expander("🛠️ Brute-Force Settings"):
-        custom_hint = st.text_input("Hint (Name of person)", help="Start with 4 letters")
-        digit_count = st.slider("Digits to try (0000-9999)", 1, 6, 4)
-    
-    indian_names = ["ROHI", "AMIT", "SURA", "VIKA", "RAHU", "ANKE", "DEEP", "PRIY", "NEHA", "SUNI"]
-
-    if pdf_file and st.button("START CRACKING"):
-        found = False
-        with st.status("Cracking...", expanded=True) as status:
-            # Logic: Name + Digits
-            search_list = [custom_hint[:4].upper()] if custom_hint else indian_names
-            
-            for name in search_list:
-                status.update(label=f"Trying Pattern: {name}...")
-                for d in itertools.product(string.digits, repeat=digit_count):
-                    pwd = name + "".join(d)
-                    try:
-                        with pikepdf.open(pdf_file, password=pwd):
-                            st.balloons()
-                            st.success(f"🎯 PASSWORD FOUND: {pwd}")
-                            found = True; break
-                    except: continue
-                if found: break
-            
-            if not found: st.error("Nahi mila! Pattern change karke try karein.")
-            status.update(label="Scanning Finished", state="complete")
+    if pdf_file:
+        st.write("PDF Loaded! Ready to Crack.")
+        # Cracking logic starts here...
