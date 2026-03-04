@@ -9,23 +9,33 @@ from io import BytesIO
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Vikas Mishra | PDF Cracker VIP", layout="centered")
 
-# --- CUSTOM CSS (PREMIUM DARK & NEON) ---
+# --- CUSTOM CSS (ONLY TEXT COLOR & VISIBILITY MODIFIED) ---
 st.markdown("""
     <style>
     .stApp {
         background: #050510;
     }
-    label, p, span, .stMarkdown, .stSubheader {
-        color: #FFFFFF !important;
+    
+    /* Global Text Color: Premium White for high visibility */
+    label, p, span, div, .stMarkdown, .stSubheader, .stCaption {
+        color: #FFFFFF !important; 
         font-weight: 700 !important;
-        text-shadow: 0px 0px 10px #00d2ff;
+        text-shadow: 0px 0px 5px rgba(0, 210, 255, 0.3);
     }
+    
+    /* Heading Color: Premium Neon Cyan */
+    h1, h2, h3 {
+        color: #00f2ff !important;
+        text-shadow: 0px 0px 15px #00f2ff;
+    }
+
+    /* Input Box Text: Sharp Cyan */
     input {
-        color: #00d2ff !important;
-        background-color: rgba(0, 210, 255, 0.1) !important;
-        border: 2px solid #00d2ff !important;
-        border-radius: 10px !important;
+        color: #00f2ff !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 2px solid #00f2ff !important;
     }
+
     .login-card {
         background: rgba(255, 255, 255, 0.03);
         padding: 40px;
@@ -35,7 +45,7 @@ st.markdown("""
         backdrop-filter: blur(15px);
         text-align: center;
     }
-    /* WhatsApp Button Style */
+
     .wa-button {
         background-color: #25D366;
         color: white !important;
@@ -45,13 +55,11 @@ st.markdown("""
         font-weight: bold;
         display: inline-block;
         margin-top: 20px;
-        box-shadow: 0px 5px 15px rgba(37, 211, 102, 0.4);
     }
     </style>
     """, unsafe_allow_html=True)
 
 # --- DATABASE & SESSION ---
-# Yahan aap apni pasand ki Access Keys add kar sakte hain
 if "valid_keys" not in st.session_state:
     st.session_state.valid_keys = ["VIKAS-786", "CRACK-2026", "VIP-USER"]
 
@@ -69,8 +77,8 @@ def generate_upi_qr(upi_id, amount):
     return buf.getvalue()
 
 # --- MAIN UI ---
-st.markdown("<h1 style='text-align: center; color: #00d2ff;'>⚡ PDF CRACKER VIP ACCESS</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #FFFFFF; font-style: italic;'>Developed by VIKAS MISHRA</p>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>⚡ PDF CRACKER VIP ACCESS</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-style: italic;'>Developed by VIKAS MISHRA</p>", unsafe_allow_html=True)
 
 if not st.session_state.logged_in:
     col1, col2 = st.columns(2)
@@ -88,10 +96,9 @@ if not st.session_state.logged_in:
         if st.button("AUTHENTICATE & ENTER"):
             if access_key in st.session_state.valid_keys:
                 st.session_state.logged_in = True
-                st.success("Access Granted! Opening Dashboard...")
                 st.rerun()
             else:
-                st.error("Invalid Key! Please get a valid key from Vikas Mishra.")
+                st.error("Invalid Key!")
 
     else:
         st.subheader("Get Your Access Key")
@@ -101,25 +108,16 @@ if not st.session_state.logged_in:
         st.image(qr_img, width=230)
         
         st.write("Step 2: Click below to get your key on WhatsApp")
-        # WhatsApp Link with Custom Message
-        wa_link = "https://wa.me/919696159863?text=Hello%20Vikas,%20I%20have%20paid%20200%20for%20PDF%20Cracker.%20Please%20give%20me%20my%20Access%20Key."
+        wa_link = "https://wa.me/919696159863?text=Hello%20Vikas,%20I%20have%20paid%20200%20for%20PDF%20Cracker."
         st.markdown(f'<a href="{wa_link}" target="_blank" class="wa-button">🟢 GET ACCESS KEY ON WHATSAPP</a>', unsafe_allow_html=True)
-        
-        st.info("Payment verify hote hi aapko personal key mil jayegi.")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
 else:
-    # --- PDF CRACKER CONTENT ---
-    st.sidebar.markdown("<h2 style='color: #00d2ff;'>VIP SYSTEM</h2>", unsafe_allow_html=True)
+    # Dashboard Content
+    st.sidebar.markdown("## VIP SYSTEM")
     if st.sidebar.button("EXIT SYSTEM"):
         st.session_state.logged_in = False
         st.rerun()
-
-    st.subheader("🚀 Start Decrypting Your PDF")
-    # Yahan wahi PDF cracking wala code jo maine pehle diya tha...
+    st.subheader("🚀 Ready to Crack PDF")
     pdf_file = st.file_uploader("Upload Target PDF", type="pdf")
-    
-    if pdf_file:
-        st.write("PDF Loaded! Ready to Crack.")
-        # Cracking logic starts here...
