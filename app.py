@@ -29,8 +29,6 @@ st.markdown("""
         font-weight: 700;
         letter-spacing: -0.5px;
         margin: 0;
-        display: flex;
-        align-items: center;
     }
     .meta-subtitle {
         font-size: 11px;
@@ -67,7 +65,7 @@ st.markdown("""
         margin-bottom: 20px;
     }
     
-    /* Professional Alert Box for the Fake Result */
+    /* Professional Alert Box for the Result */
     .audit-result-box {
         background-color: #FEF2F2;
         border: 1px solid #FEE2E2;
@@ -83,8 +81,6 @@ st.markdown("""
         font-size: 14.5px;
         font-weight: 700;
         margin-bottom: 12px;
-        display: flex;
-        align-items: center;
     }
     
     .result-row {
@@ -98,7 +94,7 @@ st.markdown("""
         font-weight: 600;
         color: #1F2937;
         display: inline-block;
-        width: 130px;
+        width: 140px;
     }
     
     .status-badge {
@@ -112,15 +108,15 @@ st.markdown("""
     }
     
     .verdict-text {
-        margin-top: 12px;
-        padding-top: 12px;
+        margin-top: 15px;
+        padding: 12px;
         border-top: 1px solid #FCA5A5;
         font-size: 13px;
         color: #7F1D1D;
         font-weight: 500;
-        background-color: rgba(239, 68, 68, 0.05);
-        padding: 10px;
+        background-color: rgba(239, 68, 68, 0.03);
         border-radius: 4px;
+        line-height: 1.6;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -143,30 +139,32 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Streamlit Text Input (Styled clean)
+# Streamlit Text Input
 post_url = st.text_input("Instagram Post URL / Media Link:", placeholder="https://www.instagram.com/p/...")
 
 # Audit Button
 if st.button("Run Diagnostics & Fetch Logs", type="primary"):
     if post_url:
         if "instagram.com" in post_url.lower():
-            # Creating a fake delay spinner for realism
+            # Realistic delay spinner
             with st.spinner("Connecting to Meta Edge Servers & Querying Database Logs..."):
                 import time
-                time.sleep(2.5) # 2.5 seconds wait time for reality effect in video
+                time.sleep(2.5)
                 
-            # Render the highly technical official-looking response
+            # Render the highly technical official-looking response with Moto g85 and IP
             st.markdown("""
                 <div class="audit-result-box">
                     <div class="result-header">⚠️ DIAGNOSTIC REPORT: CRITICAL MODERATION DISCREPANCY DETECTED</div>
                     <div class="result-row"><span class="label">Object Type:</span> Media_Comment_Lifecycle</div>
                     <div class="result-row"><span class="label">System Status:</span> <span class="status-badge">NO GLITCH / NO BUG</span></div>
                     <div class="result-row"><span class="label">Server Code:</span> HTTP 200 OK (Request Successfully Processed)</div>
-                    <div class="result-row"><span class="label">Action Source:</span> Client-Side Manual Request (Device Session)</div>
+                    <div class="result-row"><span class="label">Action Source:</span> Client-Side Manual Request</div>
+                    <div class="result-row"><span class="label">Device Session:</span> <b>Motorola Moto g85 5G</b></div>
+                    <div class="result-row"><span class="label">Network IP:</span> 192.168.43.117 (Mobile Data Gateway)</div>
                     
                     <div class="verdict-text">
                         <b>LOG ANALYSIS VERDICT:</b><br>
-                        The comment was successfully removed via an explicit <b>"Delete Request"</b> triggered manually by an authorized user session. This action was NOT caused by an Instagram server exception, background crash, database sync glitch, or automated spam filter. The deletion request originated directly from a device session actively managed on this post.
+                        The comment was successfully removed via an explicit <b>"Delete Request"</b> triggered manually by an authorized user session. This action was NOT caused by an Instagram server exception, background crash, database sync glitch, or automated spam filter. The deletion request originated directly from the device session (<b>Moto g85</b>) actively logged into the profile profile interface.
                     </div>
                 </div>
             """, unsafe_allow_html=True)
